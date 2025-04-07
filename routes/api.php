@@ -26,6 +26,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/books/{id}', [BookController::class, 'show']);
     Route::put('/books/{id}', [BookController::class, 'update']);
     Route::delete('/books/{id}', [BookController::class, 'destroy']);
+    Route::patch('/books/{id}/restore', [BookController::class, 'restore']);
+
 
     // Книги других пользователей (если есть доступ)
     Route::get('/users/{id}/books', [BookController::class, 'getUserBooks']);

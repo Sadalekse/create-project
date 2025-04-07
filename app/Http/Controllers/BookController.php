@@ -119,4 +119,17 @@ class BookController extends Controller
             'q' => $request->query,
         ]);
     }
+    // 🔍 8. Восстановление удаленной книги
+    public function restore($id)
+    {
+    $book = Book::where('id', $id)
+                ->where('user_id', Auth::id())
+                ->where('deleted', true)
+                ->firstOrFail();
+
+    $book->update(['deleted' => false]);
+
+    return response()->json(['message' => 'Book restored successfully.']);
+    }
+
 }
