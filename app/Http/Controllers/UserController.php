@@ -2,16 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends Controller
 {
-    // Получить всех пользователей (id и имя)
-    public function index()
+    public function index(): JsonResponse
     {
-        $users = User::select('id', 'name')->get();
+        return response()->json(
+            User::select('id', 'name', 'email')->get()
+        );
+    }
+    public function grantAccess(User $user)
+    {
+        if (auth()->id() === $user->id) {
+            return response()->json(['message' => 'You cannot grant access to yourself.'], 403);
+        }
 
-        return response()->json($users);
+        auth()->user()->grantedAccesses()->syncWithoutDetaching($user->id);
+
+        return response()->json(['message' => 'Access granted successfully.']);
     }
 }
