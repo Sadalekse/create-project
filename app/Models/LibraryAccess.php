@@ -5,12 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Access extends Model
+class LibraryAccess extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'granted_user_id',
-    ];
+    protected $fillable = ['owner_id', 'viewer_id'];
 }

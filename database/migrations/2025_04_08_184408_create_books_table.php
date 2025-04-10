@@ -9,18 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up() : void
-    {
-
+    public function up(): void
+{
     Schema::create('books', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Автор книги
-        $table->string('title'); // Название
-        $table->text('content')->nullable(); // Содержание книги
-        $table->boolean('deleted')->default(false); // Пометка "удалена" для восстановления
+        $table->string('title');
+        $table->string('author');
+        $table->text('description')->nullable();
+        $table->date('published_date')->nullable();
         $table->timestamps();
+        $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        $table->softDeletes();
+
     });
-    }
+}
+
+
 
     /**
      * Reverse the migrations.

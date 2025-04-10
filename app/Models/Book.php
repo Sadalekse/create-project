@@ -2,14 +2,26 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Book extends Model
 {
-    protected $fillable = ['user_id', 'title', 'content', 'deleted'];
+    use HasFactory;
+    use SoftDeletes;
 
+    protected $fillable = [
+        'title',
+        'author',
+        'description',
+        'published_date',
+        'user_id',
+    ];
     public function user()
     {
-        return $this->belongsTo(User::class);
+    return $this->belongsTo(User::class);
     }
+
 }
+
