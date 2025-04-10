@@ -1,38 +1,32 @@
 <?php
 
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Casts\Attribut;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LibraryAccessController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookController;
-use App\Http\Controllers\LibraryAccessController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-*/
 
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::middleware('auth:sanctum')->group(function () {
-    // Пользователи
+Route::middleware('auth.api:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/user', fn (Request $request) => $request->user());
+
     Route::get('/users', [UserController::class, 'index']);
-    Route::post('/library/access', [LibraryAccessController::class, 'grantAccess']);
+    Route::post('/grant-access/{user}', [UserController::class, 'grantAccess']);
 
-    // Книги
-    Route::get('/books', [BookController::class, 'index']);
-    Route::post('/books', [BookController::class, 'store']);
-    Route::get('/books/{id}', [BookController::class, 'show']);
-    Route::put('/books/{id}', [BookController::class, 'update']);
-    Route::delete('/books/{id}', [BookController::class, 'destroy']);
-    Route::patch('/books/{id}/restore', [BookController::class, 'restore']);
+    Route::apiResource('books', BookController::class);
+    Route::post('/books/{book}/restore', [BookController::class, 'restore']);
+    Route::post('/books/{book}/restore', [BookController::class, 'restore'])->middleware('auth:sanctum');
+    Route::get('/books/trashed', [BookController::class, 'trashed']);
 
-
-    // Книги других пользователей (если есть доступ)
-    Route::get('/users/{id}/books', [BookController::class, 'getUserBooks']);
-
-    // Поиск и сохранение внешних книг
-    Route::get('/books/search', [BookController::class, 'searchBooks']);
-    Route::post('/books/save', [BookController::class, 'saveExternalBook']);
 });
+
+
+
+
