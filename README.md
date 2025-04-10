@@ -1,88 +1,36 @@
-# Book Library API (Laravel + Vue)
+# Book Library API (v1.0.0)
 
-This project is a Book Library API built with Laravel (backend) and Vue 3 (frontend SPA). It is a qualification project to demonstrate knowledge of REST API design, Laravel Sanctum authentication, and SPA integration.
-
-## Features
-- User registration & login with Laravel Sanctum (cookie-based authentication)
-- Display list of all users (participants)
-- Grant access to personal book library for specific users
-- CRUD operations for books (Create, View, Update, Delete)
-- Soft delete and restore functionality for books
-- View another user's book list (if access granted)
-- Dark/light theme toggle in SPA
-- Responsive UI using MDB Vue UI Kit
-- SPA built with Vue 3, Vue Router, and Toast notifications
-
-## Not Yet Implemented / In Progress
-- Book search using Google Books / MIF APIs (external search)
-- Save found books from external search
-- File upload for book text / cover
-- Full dark mode theming for all pages
-- Complete frontend forms and UI polish
-
-## Technologies
-- PHP 8.2, Laravel 12+, Sanctum, MySQL 8
-- Vue 3, Vite, vue-router, Toastification, MDB UI Kit
-- REST API architecture, JSON format, 3NF-compliant DB
-
-## Setup
-### Backend (Laravel)
-```bash
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate
-php artisan serve
-```
-
-### Frontend (Vue SPA)
-```bash
-cd laravel-spa
-npm install
-npm run dev
-```
-
-## API Routes Summary
-- `POST /api/register` – User registration
-- `POST /api/login` – Login
-- `POST /api/logout` – Logout
-- `GET /api/user` – Current user info
-- `GET /api/users` – All users
-- `POST /api/grant-access/{user}` – Grant book access
-- `GET /api/books` – List books (own + shared)
-- `POST /api/books` – Create book
-- `GET /api/books/{id}` – View book
-- `PUT /api/books/{id}` – Update book
-- `DELETE /api/books/{id}` – Soft delete book
-- `GET /api/books/trashed` – List deleted books
-- `POST /api/books/{id}/restore` – Restore book
-
-## Notes
-- CSRF protection is enabled
-- Sanctum used with SPA cookie authentication
-- API responses in JSON format
+A RESTful API and frontend SPA for managing personal and shared book collections.
 
 ---
 
-# Библиотека книг (Laravel + Vue)
+## Features
 
-Этот проект реализует REST API для мобильного приложения библиотеки книг. Поддерживает Laravel Sanctum, SPA-интерфейс на Vue 3, темную/светлую тему.
+- User registration and login (via Laravel Sanctum)
+- JWT-based cookie authentication
+- CSRF protection (for SPA usage)
+- Book management (CRUD + soft deletes + restore)
+- Access control: grant access to your library
+- View books of users who granted access
+- Vue 3 + Vite frontend with login/register/books interface
+- Dark mode toggle with persistent storage
+- Toast notifications for actions
 
-## Реализовано
-- Регистрация и вход пользователей (с Sanctum)
-- Список всех участников
-- Выдача доступа к личной библиотеке
-- CRUD книг (создание, редактирование, удаление, восстановление)
-- Показ книг других пользователей (при наличии доступа)
-- SPA на Vue 3 c переключением темы
+---
 
-## Частично / не сделано
-- Поиск книг (внешний API Google / МИФ)
-- Сохранение найденных книг
-- Файлы (текст/обложка)
-- Стилизация всех форм и доработка UI
+## Stack
 
-## Установка Laravel
+- PHP 8.2, Laravel 12
+- MySQL 8
+- Vue 3 (Composition API)
+- Vite, Toastification, MDB UI Kit
+
+---
+
+## Setup
+
+### Backend (Laravel API)
+
 ```bash
 composer install
 cp .env.example .env
@@ -91,15 +39,163 @@ php artisan migrate
 php artisan serve
 ```
 
-## Установка SPA
+Ensure Sanctum is configured correctly in `.env`:
+```
+SESSION_DOMAIN=localhost
+SANCTUM_STATEFUL_DOMAINS=localhost:5173
+```
+
+### Frontend (Vue SPA)
+
 ```bash
 cd laravel-spa
 npm install
 npm run dev
 ```
 
-## Важно
-- Sanctum с cookie-авторизацией
-- Защита CSRF для SPA
-- JSON ответы API
+App available at: http://localhost:5173
+
+---
+
+## API Endpoints
+
+| Method | Endpoint                 | Description |
+|--------|--------------------------|-------------|
+| POST   | /api/register            | Register user |
+| POST   | /api/login               | Login user (returns cookie) |
+| POST   | /api/logout              | Logout |
+| GET    | /api/user                | Get current user info |
+| GET    | /api/users               | List all users |
+| POST   | /api/grant-access/{id}   | Grant access to your books |
+| GET    | /api/books               | Get books you own or have access to |
+| POST   | /api/books               | Create book |
+| GET    | /api/books/{id}          | View single book |
+| PUT    | /api/books/{id}          | Update book |
+| DELETE | /api/books/{id}          | Soft delete book |
+| GET    | /api/books/trashed       | List deleted books |
+| POST   | /api/books/{id}/restore  | Restore deleted book |
+
+All protected routes require `X-XSRF-TOKEN` header and authentication cookies.
+
+---
+
+## Not Implemented Yet
+
+- Book search via Google Books / MIF external API
+- Upload and parse text file for book content
+- Granting access screen (frontend)
+- Viewing another user's books (frontend)
+
+---
+
+## Postman Collection
+
+📬 A complete collection with authentication and headers is included.
+
+See: `book-library-api.postman_collection.json`
+
+---
+
+## License
+
+MIT
+
+# API «Библиотека книг» (v1.0.0)
+
+REST API и SPA-интерфейс для управления личной и общей библиотекой книг.
+
+---
+
+## Возможности
+
+- Регистрация и вход пользователей (Laravel Sanctum)
+- Аутентификация по куки с JWT и CSRF-защитой
+- CRUD для книг + мягкое удаление и восстановление
+- Предоставление доступа к своей библиотеке другим пользователям
+- Просмотр книг пользователей, которые выдали вам доступ
+- SPA-интерфейс на Vue 3: формы входа, регистрации, книги
+- Поддержка тёмной темы
+- Всплывающие уведомления об успешных действиях
+
+---
+
+## Стек технологий
+
+- PHP 8.2, Laravel 12
+- MySQL 8
+- Vue 3 (Composition API), Vite
+- MDB UI Kit, Toastification
+
+---
+
+## Установка
+
+### Бэкенд (Laravel API)
+
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan serve
+```
+
+Файл `.env`:
+```
+SESSION_DOMAIN=localhost
+SANCTUM_STATEFUL_DOMAINS=localhost:5173
+```
+
+### Фронтенд (SPA на Vue)
+
+```bash
+cd laravel-spa
+npm install
+npm run dev
+```
+
+Доступно по адресу: http://localhost:5173
+
+---
+
+## API эндпоинты
+
+| Метод | Маршрут                   | Описание |
+|--------|----------------------------|----------|
+| POST   | /api/register              | Регистрация пользователя |
+| POST   | /api/login                 | Авторизация (куки) |
+| POST   | /api/logout                | Выход |
+| GET    | /api/user                  | Текущий пользователь |
+| GET    | /api/users                 | Список всех пользователей |
+| POST   | /api/grant-access/{id}     | Выдать доступ к библиотеке |
+| GET    | /api/books                 | Получить доступные книги |
+| POST   | /api/books                 | Создать книгу |
+| GET    | /api/books/{id}            | Посмотреть книгу |
+| PUT    | /api/books/{id}            | Обновить книгу |
+| DELETE | /api/books/{id}            | Удалить книгу (мягко) |
+| GET    | /api/books/trashed         | Удалённые книги |
+| POST   | /api/books/{id}/restore    | Восстановить книгу |
+
+Защищённые маршруты требуют `X-XSRF-TOKEN` и куки.
+
+---
+
+## Что не реализовано
+
+- Поиск книг через Google Books или МИФ API
+- Загрузка текстового файла с книгой
+- Экран предоставления доступа (во фронте)
+- Интерфейс просмотра чужих книг
+
+---
+
+## Коллекция Postman
+
+📬 В комплекте — готовая коллекция с авторизацией и заголовками: `book-library-api.postman_collection.json`
+
+---
+
+## Лицензия
+
+MIT
 
